@@ -1,0 +1,447 @@
+{
+    "@context": "dtmi:dtdl:extension:instantiation",
+    "@type": "Instance",
+    "@id": "dtmi:tent",
+    "description": "A digital twin instance representing a tent with three distinct heating zones, each equipped with sensors and controllers.",
+    "displayName": "Tent Heating System",
+    "contents": [
+        {
+            "@type": "InstanceComponent",
+            "@id": "dtmi:zone1:heater1",
+            "name": "H1",
+            "displayName": "Heater for Zone 1",
+            "contents": [ 
+                {
+                    "@type": "InstanceTelemetry",
+                    "name": "Heater1Request",
+                    "schema":  "double",
+                    "realization": {
+                        "@type": "TelemetryRealizationMQTTSubscriber",
+                        "server": "localhost:1883",
+                        "topic": "controller/C1/heater1",
+                        "dataFormat": "json"
+                    }
+                },
+                {
+                    "@type": "InstanceTelemetry",
+                    "name": "Heater1Response",
+                    "schema": "double",
+                    "realization": {
+                        "@type": "TelemetryRealizationMQTTPublisher",
+                        "server": "localhost:1883",
+                        "topic": "heater/H1",
+                        "dataFormat": "json"
+                    }
+                }
+            ]
+        },
+        {
+            "@type": "InstanceComponent",
+            "@id": "dtmi:zone2:heater2",
+            "name": "H2",
+            "displayName": "Heater for Zone 2",
+            "contents": [
+                {
+                    "@type": "InstanceTelemetry",
+                    "name": "Heater2Request",
+                    "schema": "double",
+                    "realization": {
+                        "@type": "TelemetryRealizationMQTTSubscriber",
+                        "server": "localhost:1883",
+                        "topic": "controller/C2/heater2",
+                        "dataFormat": "json"
+                    }
+                },
+                {
+                    "@type": "InstanceTelemetry",
+                    "name": "Heater2Response",
+                    "schema": "double",
+                    "realization": {
+                        "@type": "TelemetryRealizationMQTTPublisher",
+                        "server": "localhost:1883",
+                        "topic": "heater/H2",
+                        "dataFormat": "json"
+                    }
+                }
+            ]
+        },
+        {
+            "@type": "InstanceComponent",
+            "@id": "dtmi:zone3:heater3",
+            "name": "H3",
+            "displayName": "Heater for Zone 3",
+            "contents": [
+                {
+                    "@type": "InstanceTelemetry",
+                    "name": "Heater3Request",
+                    "schema": "double",
+                    "realization": {
+                        "@type": "TelemetryRealizationMQTTSubscriber",
+                        "server": "localhost:1883",
+                        "topic": "controller/C3/heater3",
+                        "dataFormat": "json"
+                    }
+                },
+                {
+                    "@type": "InstanceTelemetry",
+                    "name": "Heater3Response",
+                    "schema": "double",
+                    "realization": {
+                        "@type": "TelemetryRealizationMQTTPublisher",
+                        "server": "localhost:1883",
+                        "topic": "heater/H3",
+                        "dataFormat": "json"
+                    }
+                }
+            ]
+        },
+        {
+            "@type": "InstanceComponent",
+            "@id": "dtmi:tent:controller1",
+            "name": "C1",
+            "displayName": "Controller for Zone 1",
+            "contents": [
+                {
+                    "@type": "InstanceTelemetry",
+                    "@id": "dtmi:controller1:temperatureSensorTA",
+                    "name": "TemperatureSensorTA",
+                    "displayName": "Temperature Sensor TA",
+                    "schema": "double",
+                    "realization": {
+                        "@type": "TelemetryRealizationMQTTSubscriber",
+                        "server": "localhost:1883",
+                        "topic": "sensor/TA",
+                        "dataFormat": "json"
+                    }
+                },
+                {
+                    "@type": "InstanceTelemetry",
+                    "@id": "dtmi:controller1:temperatureSensorTB",
+                    "name": "TemperatureSensorTB",
+                    "displayName": "Temperature Sensor TB",
+                    "schema": "double",
+                    "realization": {
+                        "@type": "TelemetryRealizationMQTTSubscriber",
+                        "server": "localhost:1883",
+                        "topic": "sensor/TB",
+                        "dataFormat": "json"
+                    }
+                },
+                {
+                    "@type": "InstanceTelemetry",
+                    "@id": "dtmi:controller1:heater1",
+                    "name": "Heater1",
+                    "displayName": "Heater Control for Zone 1",
+                    "schema": "double",
+                    "realization": {
+                        "@type": "TelemetryRealizationMQTTPublisher",
+                        "server": "localhost:1883",
+                        "topic": "controller/C1/heater1",
+                        "dataFormat": "json"
+                    }
+                }
+            ]
+        },
+        {
+            "@type": "InstanceComponent",
+            "@id": "dtmi:tent:controller2",
+            "name": "C2",
+            "displayName": "Controller for Zone 2",
+            "contents": [
+                {
+                    "@type": "InstanceTelemetry",
+                    "@id": "dtmi:controller2:temperatureSensorTB",
+                    "name": "TemperatureSensorTB",
+                    "displayName": "Temperature Sensor TB",
+                    "schema": "double",
+                    "realization": {
+                        "@type": "TelemetryRealizationMQTTSubscriber",
+                        "server": "localhost:1883",
+                        "topic": "sensor/TB",
+                        "dataFormat": "json"
+                    }
+                },
+                {
+                    "@type": "InstanceTelemetry",
+                    "@id": "dtmi:controller2:temperatureSensorTC",
+                    "name": "TemperatureSensorTC",
+                    "displayName": "Temperature Sensor TC",
+                    "schema": "double",
+                    "realization": {
+                        "@type": "TelemetryRealizationMQTTSubscriber",
+                        "server": "localhost:1883",
+                        "topic": "sensor/TC",
+                        "dataFormat": "json"
+                    }
+                },
+                {
+                    "@type": "InstanceTelemetry",
+                    "@id": "dtmi:controller2:heater2",
+                    "name": "Heater2",
+                    "displayName": "Heater Control for Zone 2",
+                    "schema": "double",
+                    "realization": {
+                        "@type": "TelemetryRealizationMQTTPublisher",
+                        "server": "localhost:1883",
+                        "topic": "controller/C2/heater2",
+                        "dataFormat": "json"
+                    }
+                }
+            ]
+        },
+        {
+            "@type": "InstanceComponent",
+            "@id": "dtmi:tent:controller3",
+            "name": "C3",
+            "displayName": "Controller for Zone 3",
+            "contents": [
+                {
+                    "@type": "InstanceTelemetry",
+                    "@id": "dtmi:controller3:temperatureSensorTC",
+                    "name": "TemperatureSensorTC",
+                    "displayName": "Temperature Sensor TC",
+                    "schema": "double",
+                    "realization": {
+                        "@type": "TelemetryRealizationMQTTSubscriber",
+                        "server": "localhost:1883",
+                        "topic": "sensor/TC",
+                        "dataFormat": "json"
+                    }
+                },
+                {
+                    "@type": "InstanceTelemetry",
+                    "@id": "dtmi:controller3:temperatureSensorTD",
+                    "name": "TemperatureSensorTD",
+                    "displayName": "Temperature Sensor TD",
+                    "schema": "double",
+                    "realization": {
+                        "@type": "TelemetryRealizationMQTTSubscriber",
+                        "server": "localhost:1883",
+                        "topic": "sensor/TD",
+                        "dataFormat": "json"
+                    }
+                },
+                {
+                    "@type": "InstanceTelemetry",
+                    "@id": "dtmi:controller3:heater3",
+                    "name": "Heater3",
+                    "displayName": "Heater Control for Zone 3",
+                    "schema": "double",
+                    "realization": {
+                        "@type": "TelemetryRealizationMQTTPublisher",
+                        "server": "localhost:1883",
+                        "topic": "controller/C3/heater3",
+                        "dataFormat": "json"
+                    }
+                }
+            ]
+        }, 
+        {
+            "@type": "InstanceComponent",
+            "@id": "dtmi:tent:sensorTA",
+            "name": "TA",
+            "displayName": "Temperature Sensor TA",
+            "contents": [
+                {
+                    "@type": "InstanceTelemetry",
+                    "@id": "dtmi:sensorTA:temperatureReading",
+                    "name": "TemperatureReading",
+                    "displayName": "Temperature Reading",
+                    "schema": "double",
+                    "realization": {
+                        "@type": "TelemetryRealizationMQTTPublisher",
+                        "server": "localhost:1883",
+                        "topic": "sensor/TA",
+                        "dataFormat": "json"
+                    }
+                },
+                {
+                    "@type": "InstanceTelemetry",
+                    "@id": "dtmi:sensorTA:heater1Output",
+                    "name": "Heater1Output",
+                    "displayName": "Heater 1 Output",
+                    "schema": "double",
+                    "realization": {
+                        "@type": "TelemetryRealizationMQTTSubscriber",
+                        "server": "localhost:1883",
+                        "topic": "heater/H1",
+                        "dataFormat": "json"
+                    }
+                }
+            ]
+        },
+        {
+            "@type": "InstanceComponent",
+            "@id": "dtmi:tent:sensorTB",
+            "name": "TB",
+            "displayName": "Temperature Sensor TB",
+            "contents": [
+                {
+                    "@type": "InstanceTelemetry",
+                    "@id": "dtmi:sensorTB:temperatureReading",
+                    "name": "TemperatureReading",
+                    "displayName": "Temperature Reading",
+                    "schema": "double",
+                    "realization": {
+                        "@type": "TelemetryRealizationMQTTPublisher",
+                        "server": "localhost:1883",
+                        "topic": "sensor/TB",
+                        "dataFormat": "json"
+                    }
+                },
+                {
+                    "@type": "InstanceTelemetry",
+                    "@id": "dtmi:sensorTB:heater1Output",
+                    "name": "Heater1Output",
+                    "displayName": "Heater 1 Output",
+                    "schema": "double",
+                    "realization": {
+                        "@type": "TelemetryRealizationMQTTSubscriber",
+                        "server": "localhost:1883",
+                        "topic": "heater/H1",
+                        "dataFormat": "json"
+                    }
+                },
+                {
+                    "@type": "InstanceTelemetry",
+                    "@id": "dtmi:sensorTB:heater2Output",
+                    "name": "Heater2Output",
+                    "displayName": "Heater 2 Output",
+                    "schema": "double",
+                    "realization": {
+                        "@type": "TelemetryRealizationMQTTSubscriber",
+                        "server": "localhost:1883",
+                        "topic": "heater/H2",
+                        "dataFormat": "json"
+                    }
+                }
+            ]
+        },
+        {
+            "@type": "InstanceComponent",
+            "@id": "dtmi:tent:sensorTC",
+            "name": "TC",
+            "displayName": "Temperature Sensor TC",
+            "contents": [
+                {
+                    "@type": "InstanceTelemetry",
+                    "@id": "dtmi:sensorTC:temperatureReading",
+                    "name": "TemperatureReading",
+                    "displayName": "Temperature Reading",
+                    "schema": "double",
+                    "realization": {
+                        "@type": "TelemetryRealizationMQTTPublisher",
+                        "server": "localhost:1883",
+                        "topic": "sensor/TC",
+                        "dataFormat": "json"
+                    }
+                },
+                {
+                    "@type": "InstanceTelemetry",
+                    "@id": "dtmi:sensorTC:heater2Output",
+                    "name": "Heater2Output",
+                    "displayName": "Heater 2 Output",
+                    "schema": "double",
+                    "realization": {
+                        "@type": "TelemetryRealizationMQTTSubscriber",
+                        "server": "localhost:1883",
+                        "topic":"heater/H2",
+                        "dataFormat": "json"
+                    }
+                },
+                {
+                    "@type": "InstanceTelemetry",
+                    "@id": "dtmi:sensorTC:heater3Output",
+                    "name": "Heater3Output",
+                    "displayName": "Heater 3 Output",
+                    "schema": "double",
+                    "realization": {
+                        "@type": "TelemetryRealizationMQTTSubscriber",
+                        "server": "localhost:1883",
+                        "topic": "heater/H3",
+                        "dataFormat": "json"
+                    }
+                }
+            ]
+        },
+        {
+            "@type": "InstanceComponent",
+            "@id": "dtmi:tent:sensorTD",
+            "name": "TD",
+            "displayName": "Temperature Sensor TD",
+            "contents": [
+                {
+                    "@type": "InstanceTelemetry",
+                    "@id": "dtmi:sensorTD:temperatureReading",
+                    "name": "TemperatureReading",
+                    "displayName": "Temperature Reading",
+                    "schema": "double",
+                    "realization": {
+                        "@type": "TelemetryRealizationMQTTPublisher",
+                        "server": "localhost:1883",
+                        "topic": "sensor/TD",
+                        "dataFormat": "json"
+                    }
+                },
+                {
+                    "@type": "InstanceTelemetry",
+                    "@id": "dtmi:sensorTD:heater3Output",
+                    "name": "Heater3Output",
+                    "displayName": "Heater 3 Output",
+                    "schema": "double",
+                    "realization": {
+                        "@type": "TelemetryRealizationMQTTSubscriber",
+                        "server": "localhost:1883",
+                        "topic": "heater/H3",
+                        "dataFormat": "json"
+                    }
+                }
+            ]
+        }
+    ],
+    "sshConnection": {
+        "address": "192.168.0.1",
+        "sshUser": "deploy",
+        "certificate": "./path/to/certificate"
+    },
+    "fileTransmissions": [
+        {
+            "source": "./local/path/to/simulator.py",
+            "destination": "/remote/path/to/simulator.py",
+            "mode": "755"
+        },
+        {
+            "source": "./local/path/to/controller.py",
+            "destination": "/remote/path/to/controller.py",
+            "mode": "755"
+        },
+        {
+            "source": "./local/path/to/monitor.py",
+            "destination": "/remote/path/to/monitor.py",
+            "mode": "755"
+        }
+    ],
+    "commands": [
+        {
+            "command": "python3",
+            "parameters": "/remote/path/to/simulator.py",
+            "type": "once"
+        },
+        {
+            "command": "python3",
+            "parameters": "/remote/path/to/controller.py",
+            "type": "once"
+        },
+        {
+            "command": "python3",
+            "parameters": "/remote/path/to/monitor.py",
+            "type": "once"
+        }
+    ],
+    "requiredPackages": [
+        {
+            "name": "paho-mqtt",
+            "source": "pip"
+        }
+    ]
+}
