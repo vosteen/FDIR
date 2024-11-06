@@ -1,5 +1,7 @@
 #!/bin/bash
 
+source ../venv/bin/activate
+
 # Starte eine neue tmux-Session namens "mosquitto_and_python"
 tmux new-session -d -s mosquitto_and_python
 

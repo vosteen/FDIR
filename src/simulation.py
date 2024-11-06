@@ -1,6 +1,7 @@
 import paho.mqtt.client as mqtt
 import json
 import numpy as np
+import config
 
 class HeatingSimulation:
     def __init__(self):
@@ -94,10 +95,11 @@ client = mqtt.Client()
 client.on_connect = on_connect
 client.on_message = on_message
 client.on_disconnect = on_disconnect
+client.username_pw_set(config.Mqtt.MQTT_SERVER_USER, config.Mqtt.MQTT_SERVER_PASS)
 
 # Start simulation
 simulation = HeatingSimulation()
-client.connect("localhost", 1883, 60)
+client.connect(config.Mqtt.MQTT_SERVER_URL, config.Mqtt.MQTT_SERVER_PORT, 60)
 client.loop_start()
 
 try:

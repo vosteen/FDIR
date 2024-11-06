@@ -1,8 +1,8 @@
 import paho.mqtt.client as mqtt
 import json
+import config
 
 # MQTT settings
-BROKER = "localhost"
 TOPIC_HEATER_STATUS = "controller/heater_status"
 
 # Global variables to store the latest messages
@@ -63,8 +63,9 @@ def main():
     client = mqtt.Client()
     client.on_connect = on_connect
     client.on_message = on_message
+    client.username_pw_set(config.Mqtt.MQTT_SERVER_USER, config.Mqtt.MQTT_SERVER_PASS)
 
-    client.connect(BROKER, 1883, 60)
+    client.connect(config.Mqtt.MQTT_SERVER_URL, config.Mqtt.MQTT_SERVER_PORT, 60)
     
     try:
         client.loop_forever()

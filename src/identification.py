@@ -3,6 +3,7 @@ from itertools import combinations
 import paho.mqtt.client as mqtt
 import json
 import threading
+import config
 
 DEBUG = False
 PRINT_ALL_CLAUSES = False
@@ -12,7 +13,7 @@ FAILING_MONITORS = {'TA', 'TC'}
 # Initialisierung des Caches
 diagnosis_cache = {}
 
-def get_graph(dtdl_file_path, broker_address="localhost", request_topic="dtdl2graph/request", reply_topic="dtdl2graph/reply", timeout=10):
+def get_graph(dtdl_file_path):
     with open(dtdl_file_path, 'r') as file:
         dtdl_data = file.read()
     
@@ -29,12 +30,13 @@ def get_graph(dtdl_file_path, broker_address="localhost", request_topic="dtdl2gr
 
     client = mqtt.Client()
     client.on_message = on_message
-    client.connect(broker_address, 1883, 60)
-    client.subscribe(reply_topic)
+    client.username_pw_set(config.Mqtt.MQTT_SERVER_USER, config.Mqtt.MQTT_SERVER_PASS)
+    client.connect(config.Mqtt.MQTT_SERVER_URL, config.Mqtt.MQTT_SERVER_PORT, 60)
+    client.subscribe("dtdl2graph/reply")
     client.loop_start()
-    client.publish(request_topic, dtdl_data)
+    client.publish("dtdl2graph/request", dtdl_data)
 
-    message_received_event.wait(timeout=timeout)
+    message_received_event.wait(timeout=10)
     client.loop_stop()
     client.disconnect()
     return response_data

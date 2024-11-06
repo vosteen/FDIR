@@ -1,5 +1,6 @@
 import json
 import paho.mqtt.client as mqtt
+import config
 
 def extract_mqtt_connections(contents):
     publisher_map = {}
@@ -99,8 +100,9 @@ def on_message(client, userdata, msg):
 def main():
     client = mqtt.Client()
     client.on_message = on_message
+    client.username_pw_set(config.Mqtt.MQTT_SERVER_USER, config.Mqtt.MQTT_SERVER_PASS)
 
-    client.connect("localhost", 1883, 60)
+    client.connect(config.Mqtt.MQTT_SERVER_URL, config.Mqtt.MQTT_SERVER_PORT, 60)
     client.subscribe("dtdl2graph/request")
 
     client.loop_forever()

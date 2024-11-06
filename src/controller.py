@@ -4,6 +4,7 @@ import threading
 import math
 import numpy as np
 import random
+import config
 
 
 class TemperatureController:
@@ -17,8 +18,8 @@ class TemperatureController:
         self.temperature_history = {zone: [] for zone in self.current_temperatures}
         self.heater_status = {f'Z{i}': 0 for i in range(1, 4)}
         self.time_history = []
-        self.adjustment_mode = 'advanced'  # Default mode
-        self.environment_temperature = 15
+        self.adjustment_mode = config.Controller.ADJUSTMENT_MODE  # Default mode
+        self.environment_temperature = config.Model.ENVIRONMENT_TEMP
         self.comparison_temperatures = {**{f'Z{i}': 15 for i in range(1, 4)}, **{f'T{i}': 0 for i in 'ABCD'}}
         self.zone_sensor_map = {
             'Z1': ('TA', 'TB'),
@@ -27,21 +28,13 @@ class TemperatureController:
         }
         self.predicted_temperatures_history = [{'TA': 0, 'TB': 0, 'TC': 0, 'TD': 0} ]
         # constants for the _real_ system
-        self.capacity = {'Z1': 1e6, 'Z2': 1e6, 'Z3': 1e6}
-        self.heat_transfer_external = {'Z1': 1000, 'Z2': 500, 'Z3': 1042}
-        self.heat_transfer_zones = {
-            'Z1': {'Z2': 500},
-            'Z2': {'Z1': 500, 'Z3': 500},
-            'Z3': {'Z2': 500}
-        }
+        self.capacity = dict(config.Model.HEAT_CAPACITY)
+        self.heat_transfer_external = dict(config.Model.HEAT_TRANSFER_EXTERNAL)
+        self.heat_transfer_zones = dict(config.Model.HEAT_TRANSFER_ZONES)
         # constants for the controller simulation
-        self.capacity_controller_simulation = {'Z1': 1e6, 'Z2': 1e6, 'Z3': 1e6}
-        self.heat_transfer_external_controller_simulation = {'Z1': 1000, 'Z2': 500, 'Z3': 1042}
-        self.heat_transfer_zones_controller_simulation = {
-            'Z1': {'Z2': 500},
-            'Z2': {'Z1': 500, 'Z3': 500},
-            'Z3': {'Z2': 500}
-        }
+        self.capacity_controller_simulation = dict(config.Model.HEAT_CAPACITY)
+        self.heat_transfer_external_controller_simulation = dict(config.Model.HEAT_TRANSFER_EXTERNAL)
+        self.heat_transfer_zones_controller_simulation = dict(config.Model.HEAT_TRANSFER_ZONES)
         self.RMSE = 0
 
     def set_adjustment_mode(self, mode):
@@ -201,7 +194,7 @@ class TemperatureController:
 
         client = mqtt.Client()
         client.on_message = on_message
-        client.connect("localhost", 1883, 60)
+        client.connect(config.Mqtt.MQTT_SERVER_URL, config.Mqtt.MQTT_SERVER_PORT, 60)
         client.subscribe('controller_simulation/temperatures')
         client.loop_start()
         client.publish("controller/heater_simulation", json.dumps(message))
@@ -242,7 +235,7 @@ class TemperatureController:
 
         client = mqtt.Client()
         client.on_message = on_message
-        client.connect("localhost", 1883, 60)
+        client.connect(config.Mqtt.MQTT_SERVER_URL, config.Mqtt.MQTT_SERVER_PORT, 60)
         client.subscribe('simulation/temperatures')
         client.loop_start()
         client.publish("controller/heater_status", json.dumps(message))
@@ -358,16 +351,17 @@ class TemperatureController:
         return {key: {k: v for k, v in value.items()} for key, value in params.items()}
 
 # Configuration and main execution
-TARGET_TEMPERATURE = 20
-BROKEN_HEATERS = {} # {'Z1': 1500}
-STOP_TIME = 5000
-DELTA_T = 200
+#TARGET_TEMPERATURE = 20
+#BROKEN_HEATERS = {'Z1': 1500}
+#STOP_TIME = 5000
+DELTA_T = config.Controller.SIM_DELTA_T
 
 client = mqtt.Client()
-controller = TemperatureController(TARGET_TEMPERATURE, BROKEN_HEATERS, STOP_TIME)
-controller.set_adjustment_mode('advanced') # simple or advanced
+client.username_pw_set(config.Mqtt.MQTT_SERVER_USER, config.Mqtt.MQTT_SERVER_PASS)
+controller = TemperatureController(config.Controller.TARGET_TEMP, config.Controller.BROKEN_HEATER_TIMES, config.Controller.SIM_STOP_TIME)
+controller.set_adjustment_mode(config.Controller.ADJUSTMENT_MODE) # simple or advanced
 
-for i in range(STOP_TIME // DELTA_T):
+for i in range(config.Controller.SIM_STOP_TIME // DELTA_T):
     # if the controller mode is advanced, the advanced adjustment function needs to be called
     if controller.adjustment_mode == 'advanced':
         controller.adjust_heater_status_advanced(client)

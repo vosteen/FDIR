@@ -2,9 +2,11 @@ import paho.mqtt.client as mqtt
 import json
 import matplotlib.pyplot as plt
 import numpy as np
+import config
 
 # MQTT settings
-BROKER = "localhost"
+BROKER = config.Mqtt.MQTT_SERVER_URL
+PORT = config.Mqtt.MQTT_SERVER_PORT
 TOPIC_TEMPERATURES = "controller/heater_status"
 TOPIC_ALERT = "monitor/alert"
 TOPIC_SIMULATION_ERROR = "controller/heater_status"
@@ -139,8 +141,9 @@ def main():
     client = mqtt.Client()
     client.on_connect = on_connect
     client.on_message = on_message
+    client.username_pw_set(config.Mqtt.MQTT_SERVER_USER, config.Mqtt.MQTT_SERVER_PASS)
 
-    client.connect(BROKER, 1883, 60)
+    client.connect(BROKER, PORT, 60)
 
     try:
         client.loop_start()
